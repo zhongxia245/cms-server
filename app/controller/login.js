@@ -10,12 +10,14 @@ class LoginController extends Controller {
 
   async login() {
     const { ctx, service } = this;
-    let username = ctx.query.username;
-    let password = ctx.query.password;
+    let username = ctx.request.body.username;
+    let password = ctx.request.body.password;
     const user = await ctx.service.user.getByUsernameAndPassword(username, password);
     if (user) {
+      ctx.cookies.set('username', user.username, { encrypt: true })
       ctx.body = { code: 0, data: user }
     } else {
+      ctx.cookies.set('username', '')
       ctx.body = { code: 404, data: '帐号或者密码不正确!' }
     }
   }

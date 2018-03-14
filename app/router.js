@@ -9,8 +9,8 @@ module.exports = app => {
   router.get('/', controller.home.index);
 
   // login
-  router.get('/api/login', controller.login.login);
-  router.get('/api/register', controller.login.register);
+  router.post('/api/login', controller.login.login);
+  router.post('/api/register', controller.login.register);
 
   // database
   router.get('/api/database/:dbName', controller.database.getTables);
