@@ -7,12 +7,23 @@ const Service = require('egg').Service;
 
 class CurdService extends Service {
 
-  async select(tbName, pageIndex = 1, pageSize = 10) {
-    const total = await this.app.mysql.count(tbName)
+  async select(tbName, pageIndex = 1, { pageSize, ...otherFilter }) {
+    // 移除空的过滤条件
+    for (const key in otherFilter) {
+      if (otherFilter.hasOwnProperty(key)) {
+        if (!otherFilter[key]) {
+          delete otherFilter[key]
+        }
+      }
+    }
+
+    pageSize = parseInt(pageSize)
+    const total = await this.app.mysql.count(tbName, otherFilter);
     const data = await this.app.mysql.select(tbName, {
+      where: otherFilter || {},
       limit: pageSize,
       offset: (pageIndex - 1) * pageSize,
-      orders: [['id', 'desc']]
+      orders: [['id']]
     });
     return { data: data, total: total };
   }

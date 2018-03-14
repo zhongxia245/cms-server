@@ -2,59 +2,70 @@
 
 const Controller = require('egg').Controller;
 
-class CurdController extends Controller {
+class TableConfigController extends Controller {
 
   async index() {
-    this.ctx.body = `simple curd api.`;
-  }
-
-  async select() {
-    const { ctx, service, config } = this;
-    let tableName = ctx.params.tableName;
-    let pageIndex = ctx.params.pageIndex;
-    let pageSize = ctx.query.pageSize || config.pageSize;
-    const data = await ctx.service.tableconfig.select(tableName, pageIndex, pageSize);
-    ctx.body = data;
+    this.ctx.body = `表配置`;
   }
 
   async getById() {
     const { ctx, service } = this;
-    let tableName = ctx.params.tableName;
     let id = ctx.params.id;
-    let data = await ctx.service.curd.getById(tableName, id);
+    let data = await service.tableconfig.getById(id);
     ctx.body = data;
   }
 
-  async getByTableName() {
+  /**
+   * 添加表并且添加相对应的字段
+   */
+  async addTableAndColumns() {
     const { ctx, service } = this;
     let tableName = ctx.params.tableName;
-    let data = await ctx.service.tableconfig.getByTableName(tableName);
-    ctx.body = data;
+
+    // 获取表的所有字段
+    let columns = await service.database.getColumnsByTable(tableName);
+
+    // 提取数据库名
+    let database = ''
+    if (columns.length > 0) {
+      database = columns[0]['TABLE_SCHEMA'];
+    }
+
+    // 添加表格
+    let tableResult = await service.tableconfig.add({
+      table_name: tableName,
+      database: database,
+      title: tableName
+    })
+    let tableId = tableResult.insertId;
+
+    // 添加表字段
+    for (let i = 0; i < columns.length; i++) {
+      let tableFieldConfig = {
+        table_id: tableId,
+        table_name: tableName,
+        name: columns[i]['COLUMN_NAME'],
+        fieldname: columns[i]['COLUMN_NAME'],
+        title: columns[i]['COLUMN_COMMENT'] || columns[i]['COLUMN_NAME'],
+        data_type: columns[i]['DATA_TYPE'],
+        col_sort: i,
+        form_sort: i,
+        remark: columns[i]['COLUMN_COMMENT']
+      }
+      service.tablefieldconfig.add(tableFieldConfig)
+    }
+
+    ctx.body = tableResult
   }
 
-  async del() {
+  async delTableAndColumns() {
     const { ctx, service } = this;
-    let tableName = ctx.params.tableName;
-    let id = ctx.params.id;
-    let result = await ctx.service.curd.del(tableName, id);
-    ctx.body = result;
+    let ids = ctx.params.id
+    const result = await service.tableconfig.del(ids);
+    const tableFieldResult = await service.tablefieldconfig.delByTableId(ids)
+    ctx.body = result
   }
 
-  async add() {
-    const { ctx, service } = this;
-    let tableName = ctx.params.tableName;
-    let data = ctx.request.body;
-    let result = await ctx.service.curd.add(tableName, data);
-    ctx.body = result;
-  }
-
-  async update() {
-    const { ctx, service } = this;
-    let tableName = ctx.params.tableName;
-    let data = ctx.request.body;
-    let result = await ctx.service.curd.update(tableName, data);
-    ctx.body = result;
-  }
 }
 
-module.exports = CurdController;
+module.exports = TableConfigController;

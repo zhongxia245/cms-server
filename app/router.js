@@ -25,8 +25,8 @@ module.exports = app => {
   router.get('/api/worktime/:pageIndex', controller.worktime.select);
 
   // database
-  router.get('/api/database/:db_name', controller.database.getTables);
-  router.get('/api/database/:table_name/columns', controller.database.getColumnsByTable);
+  router.get('/api/database/:dbName', controller.database.getTables);
+  router.get('/api/database/:tableName/columns', controller.database.getColumnsByTable);
 
   // simple curd
   router.get('/api/curd/:tableName/:id', controller.curd.getById);
@@ -35,10 +35,19 @@ module.exports = app => {
   router.post('/api/curd/:tableName', controller.curd.add);
   router.delete('/api/curd/:tableName/:id', controller.curd.del);
 
+  //  simple curd by tableid
+  router.get('/api/curd_id/:tableId/:id', controller.curd.getByTableIdAndId);
+  router.get('/api/curd_id/select/:tableId/:pageIndex', controller.curd.selectByTableId);
+  router.put('/api/curd_id/:tableId', controller.curd.updateByTableId);
+  router.post('/api/curd_id/:tableId', controller.curd.addByTableId);
+  router.delete('/api/curd_id/:tableId/:id', controller.curd.delByTableId);
+
   // tableconfig 
-  router.get('/api/tableconfig/:tableName', controller.tableconfig.getByTableName);
-  router.get('/api/tableconfig/:tableName/:pageIndex', controller.tableconfig.select);
-  router.put('/api/curd/:tableName', controller.curd.update);
-  router.post('/api/curd/:tableName', controller.curd.add);
-  router.delete('/api/curd/:tableName/:id', controller.curd.del);
+  router.get('/api/tableconfig/:id', controller.tableconfig.getById);
+  router.post('/api/tableconfig/:tableName', controller.tableconfig.addTableAndColumns);
+  router.delete('/api/tableconfig/:id', controller.tableconfig.delTableAndColumns);
+
+  // tableFieldConfig 
+  router.get('/api/tablefieldconfig/:tableId', controller.tablefieldconfig.getByTableId);
+  router.get('/api/tablefieldconfig/:tableName/:pageIndex', controller.tablefieldconfig.select);
 };
