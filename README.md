@@ -11,6 +11,9 @@ see [egg docs][egg] for more detail.
 ### Development
 
 ```bash
+# 第一次运行需要初始化数据库
+npm run init
+
 $ npm i
 $ npm run dev
 $ open http://localhost:7001/
