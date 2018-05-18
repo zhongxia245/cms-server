@@ -23,12 +23,12 @@ module.exports = app => {
   router.post('/api/curd/:tableName', controller.curd.add);
   router.delete('/api/curd/:tableName/:id', controller.curd.del);
 
-  // tableconfig 
+  // tableconfig
   router.get('/api/tableconfig/:id', controller.tableconfig.getById);
   router.post('/api/tableconfig/:tableName', controller.tableconfig.addTableAndColumns);
   router.delete('/api/tableconfig/:id', controller.tableconfig.delTableAndColumns);
 
-  // tableFieldConfig 
+  // tableFieldConfig
   router.get('/api/tablefieldconfig/:tableId', controller.tablefieldconfig.getByTableId);
   router.get('/api/tablefieldconfig/:tableName/:pageIndex', controller.tablefieldconfig.select);
 };

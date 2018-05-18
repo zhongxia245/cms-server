@@ -5,14 +5,14 @@ const Controller = require('egg').Controller;
 class TableConfigController extends Controller {
 
   async index() {
-    this.ctx.body = `表字段配置`;
+    this.ctx.body = '表字段配置';
   }
 
   async select() {
     const { ctx, service, config } = this;
-    let tableName = ctx.params.tableName;
-    let pageIndex = ctx.params.pageIndex;
-    let pageSize = ctx.query.pageSize || config.pageSize;
+    const tableName = ctx.params.tableName;
+    const pageIndex = ctx.params.pageIndex;
+    const pageSize = ctx.query.pageSize || config.pageSize;
     const data = await service.tablefieldconfig.select(tableName, pageIndex, pageSize);
     ctx.body = data;
   }
@@ -20,8 +20,8 @@ class TableConfigController extends Controller {
 
   async getByTableId() {
     const { ctx, service } = this;
-    let tableId = ctx.params.tableId;
-    let data = await service.tablefieldconfig.getByTableId(tableId);
+    const tableId = ctx.params.tableId;
+    const data = await service.tablefieldconfig.getByTableId(tableId);
     ctx.body = data;
   }
 }

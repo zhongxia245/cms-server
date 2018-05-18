@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = appInfo => {
-  const config = exports = {};
+  const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1520415145480_8915';
@@ -30,19 +30,18 @@ module.exports = appInfo => {
   };
 
   // 每页条数
-  config.pageSize = 10
+  config.pageSize = 10;
 
   config.cors = {
     origin: '*',
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
 
   config.security = {
     csrf: {
       enable: false,
-    }
-  }
-
+    },
+  };
 
   return config;
 };

@@ -9,13 +9,13 @@ class TableFieldConfigService extends Service {
   async getByTableId(tableId) {
     const data = await this.app.mysql.select('c_tablefieldconfig', {
       where: { table_id: tableId },
-      orders: [['col_sort']]
+      orders: [[ 'col_sort' ]],
     });
     return data;
   }
 
   async select(tableName, pageIndex = 1, pageSize = 10) {
-    const total = await this.app.mysql.count('c_tablefieldconfig')
+    const total = await this.app.mysql.count('c_tablefieldconfig');
     const data = await this.app.mysql.select('c_tablefieldconfig', {
       where: {
         table_name: tableName,
@@ -23,11 +23,11 @@ class TableFieldConfigService extends Service {
       limit: pageSize,
       offset: (pageIndex - 1) * pageSize,
     });
-    return { data: data, total: total };
+    return { data, total };
   }
 
   async getById(id) {
-    const data = await this.app.mysql.get('c_tablefieldconfig', { id: id });
+    const data = await this.app.mysql.get('c_tablefieldconfig', { id });
     return data;
   }
 
@@ -50,7 +50,7 @@ class TableFieldConfigService extends Service {
 
   async update(data) {
     const result = await this.app.mysql.update('c_tablefieldconfig', data);
-    return result
+    return result;
   }
 }
 

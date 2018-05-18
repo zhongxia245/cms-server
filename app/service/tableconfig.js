@@ -8,13 +8,13 @@ class TableConfigService extends Service {
 
   async getByTableName(tableName) {
     const data = await this.app.mysql.select('c_tableconfig', {
-      where: { table_name: tableName }
+      where: { table_name: tableName },
     });
     return data;
   }
 
   async select(tableName, pageIndex = 1, pageSize = 10) {
-    const total = await this.app.mysql.count('c_tableconfig')
+    const total = await this.app.mysql.count('c_tableconfig');
     const data = await this.app.mysql.select('c_tableconfig', {
       where: {
         table_name: tableName,
@@ -22,11 +22,11 @@ class TableConfigService extends Service {
       limit: pageSize,
       offset: (pageIndex - 1) * pageSize,
     });
-    return { data: data, total: total };
+    return { data, total };
   }
 
   async getById(id) {
-    const data = await this.app.mysql.get('c_tableconfig', { id: id });
+    const data = await this.app.mysql.get('c_tableconfig', { id });
     return data;
   }
 
@@ -43,7 +43,7 @@ class TableConfigService extends Service {
 
   async update(data) {
     const result = await this.app.mysql.update('c_tableconfig', data);
-    return result
+    return result;
   }
 }
 

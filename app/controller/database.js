@@ -8,16 +8,16 @@ class DatabaseController extends Controller {
   }
 
   async getTables() {
-    const { ctx } = this
-    let dbName = ctx.params.dbName || 'cms_server'
-    let tables = await this.service.database.getTables(dbName)
+    const { ctx } = this;
+    const dbName = ctx.params.dbName || 'cms_server';
+    const tables = await this.service.database.getTables(dbName);
     ctx.body = tables;
   }
 
   async getColumnsByTable() {
-    const { ctx } = this
-    let tableName = ctx.params.tableName || 'tb_users'
-    let tables = await this.service.database.getColumnsByTable(tableName)
+    const { ctx } = this;
+    const tableName = ctx.params.tableName || 'tb_users';
+    const tables = await this.service.database.getColumnsByTable(tableName);
     ctx.body = tables;
   }
 }
