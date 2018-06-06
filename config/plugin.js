@@ -1,13 +1,18 @@
-'use strict';
+'use strict'
 
 // had enabled by egg
 // exports.static = true;
 exports.mysql = {
   enable: true,
-  package: 'egg-mysql',
-};
+  package: 'egg-mysql'
+}
 
 exports.cors = {
   enable: true,
-  package: 'egg-cors',
-};
+  package: 'egg-cors'
+}
+
+exports.jwt = {
+  enable: true,
+  package: 'egg-jwt'
+}

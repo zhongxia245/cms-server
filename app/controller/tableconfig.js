@@ -3,6 +3,7 @@
 const Controller = require('egg').Controller;
 
 class TableConfigController extends Controller {
+
   async index() {
     this.ctx.body = '表配置';
   }
@@ -61,9 +62,10 @@ class TableConfigController extends Controller {
     const { ctx, service } = this;
     const ids = ctx.params.id;
     const result = await service.tableconfig.del(ids);
-    await service.tablefieldconfig.delByTableId(ids);
+    const tableFieldResult = await service.tablefieldconfig.delByTableId(ids);
     ctx.body = result;
   }
+
 }
 
 module.exports = TableConfigController;
