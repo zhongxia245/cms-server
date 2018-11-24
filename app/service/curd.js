@@ -6,6 +6,27 @@
 const Service = require('egg').Service
 
 class CurdService extends Service {
+  async getDatabase(tbName) {
+    const { service, app } = this.ctx
+    app.dbs = app.dbs || {}
+
+    let dbsConfig = await service.database.getDataBaseByTableName(tbName)
+    let mysqlConfig = dbsConfig[0]
+    // 如果不存在表对应的数据库，则表示该表是通用后台表
+    if (!mysqlConfig) {
+      return this.app.mysql
+    }
+    let dbName = mysqlConfig.database
+    // 已经有实例则返回，否则创建数据库实例
+    if (app.dbs[dbName]) {
+      return app.dbs[dbName]
+    } else {
+      let mysqlInstance = await app.mysql.createInstanceAsync(mysqlConfig)
+      app.dbs[dbName] = mysqlInstance
+      return mysqlInstance
+    }
+  }
+
   async select(tbName, pageIndex = 1, { pageSize, ...otherFilter }) {
     // 移除空的过滤条件
     for (const key in otherFilter) {
@@ -17,8 +38,11 @@ class CurdService extends Service {
     }
 
     pageSize = parseInt(pageSize)
-    const total = await this.app.mysql.count(tbName, otherFilter)
-    const data = await this.app.mysql.select(tbName, {
+
+    let mysql = await this.getDatabase(tbName)
+
+    const total = await mysql.count(tbName, otherFilter)
+    const data = await mysql.select(tbName, {
       where: otherFilter || {},
       limit: pageSize,
       offset: (pageIndex - 1) * pageSize,
@@ -28,23 +52,27 @@ class CurdService extends Service {
   }
 
   async getById(tbName, id) {
-    const data = await this.app.mysql.get(tbName, { id: id })
+    let mysql = await this.getDatabase(tbName)
+    const data = await mysql.get(tbName, { id: id })
     return data
   }
 
   async add(tbName, data) {
-    const result = await this.app.mysql.insert(tbName, data)
+    let mysql = await this.getDatabase(tbName)
+    const result = await mysql.insert(tbName, data)
     return result
   }
 
   // 支持批量删除，批量用 , 隔开
   async del(tbName, ids) {
-    const result = await this.app.mysql.delete(tbName, { id: ids.split(',') })
+    let mysql = await this.getDatabase(tbName)
+    const result = await mysql.delete(tbName, { id: ids.split(',') })
     return result
   }
 
   async update(tbName, data) {
-    const result = await this.app.mysql.update(tbName, data)
+    let mysql = await this.getDatabase(tbName)
+    const result = await mysql.update(tbName, data)
     return result
   }
 }

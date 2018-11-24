@@ -1,13 +1,13 @@
-'use strict'
+'use strict';
 
 module.exports = appInfo => {
-  const config = (exports = {})
+  const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1520415145480_8915'
+  config.keys = appInfo.name + '_1520415145480_8915';
 
   // add your config here
-  config.middleware = []
+  config.middleware = [];
 
   config.mysql = {
     // 单数据库信息配置
@@ -21,32 +21,32 @@ module.exports = appInfo => {
       // 密码
       password: '',
       // 数据库名
-      database: 'cms_server'
+      database: 'cms_server',
     },
     // 是否加载到 app 上，默认开启
     app: true,
     // 是否加载到 agent 上，默认关闭
-    agent: false
-  }
+    agent: false,
+  };
 
   // 每页条数
-  config.pageSize = 10
+  config.pageSize = 10;
 
   config.cors = {
     origin: '*',
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
-  }
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  };
 
   config.security = {
     csrf: {
-      enable: false
-    }
-  }
+      enable: false,
+    },
+  };
 
   config.jwt = {
     secret: 'zhongxia_090807',
-    match: '/api/*'
-  }
+    match: '/api/*',
+  };
 
-  return config
-}
+  return config;
+};
